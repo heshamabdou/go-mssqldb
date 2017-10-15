@@ -345,7 +345,7 @@ func readByteLenType(ti *typeInfo, r *tdsBuffer) interface{} {
 		default:
 			badStreamPanicf("Invalid size for MONEYNTYPE")
 		}
-	case typeDateTimeN:
+	case typeDateTimeN, typeDateTime:
 		switch len(buf) {
 		case 4:
 			return decodeDateTim4(buf)
@@ -663,7 +663,7 @@ func readVarLen(ti *typeInfo, r *tdsBuffer) {
 	case typeGuid, typeIntN, typeDecimal, typeNumeric,
 		typeBitN, typeDecimalN, typeNumericN, typeFltN,
 		typeMoneyN, typeDateTimeN, typeChar,
-		typeVarChar, typeBinary, typeVarBinary:
+		typeVarChar, typeBinary, typeVarBinary, typeDateTime:
 		// byle len types
 		ti.Size = int(r.byte())
 		ti.Buffer = make([]byte, ti.Size)
@@ -1143,7 +1143,7 @@ func makeGoLangTypeName(ti typeInfo) string {
 		default:
 			panic("invalid size of MONEYN")
 		}
-	case typeDateTimeN:
+	case typeDateTimeN, typeDateTime:
 		switch ti.Size {
 		case 4:
 			return "SMALLDATETIME"
@@ -1244,7 +1244,7 @@ func makeGoLangTypeLength(ti typeInfo) (int64, bool) {
 		default:
 			panic("invalid size of MONEYN")
 		}
-	case typeDateTimeN:
+	case typeDateTimeN, typeDateTime:
 		switch ti.Size {
 		case 4:
 			return 0, false
@@ -1363,7 +1363,7 @@ func makeGoLangTypePrecisionScale(ti typeInfo) (int64, int64, bool) {
 		default:
 			panic("invalid size of MONEYN")
 		}
-	case typeDateTimeN:
+	case typeDateTimeN, typeDateTime:
 		switch ti.Size {
 		case 4:
 			return 0, 0, false
